@@ -10,6 +10,7 @@
 
 /**
  * Returns true if value is in array of n values, else false.
+ * First: Value being searched for.  Second: Array of values.  Third: Size of array
  */
 bool search(int value, int values[], int n)
 {
