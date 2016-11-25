@@ -6,9 +6,9 @@ bool searchmethodB(int value, int values[], int n);
 
 int main(void)
 {
-    int testValue = 5;
-    int testArray[5] = {1, 3, 4, 6, 12};
-    int testArrayLength = 5;
+    int testValue = 13;
+    int testArray[10] = {1, 3, 3, 4, 7, 8, 8, 12, 25, 62};
+    int testArrayLength = 10;
     bool found = searchmethodB(testValue, testArray, testArrayLength);
     printf("%i\n", found);
     
@@ -39,20 +39,38 @@ bool searchmethodB(int value, int values[], int n)
     int right = n - 1;
     bool found = false;
     int checked = 0;
+    int runout = 0;
     
-    while ((left != right) && (value != values[checked]))
+    while ((left != right) && (value != values[checked]) && runout < 5)
     {
-        checked = (right-left)/2;
-       
+        runout ++;
+        checked = (left + right) / 2;
+        printf("%i checked\n %i left\n %i right\n ", checked, left, right);
+        
+        if(left == (right -1))
+        {
+            if(values[left] == value || values[right] == value)
+            {
+                found = true;
+                break;
+            }
+            else
+            {
+                found = false;
+                break;
+            }
+        }
         if (value != values[checked])
         {
             if(value > values[checked])
             {
                 left = checked + 1;
+                printf("greater\n ");
             }
             else
             {
                 right = checked - 1;
+                printf("less\n ");
             }
         }
         else
@@ -60,6 +78,7 @@ bool searchmethodB(int value, int values[], int n)
             found = true;
         }
     }
+    printf("\n");
     return found;
     
 }
