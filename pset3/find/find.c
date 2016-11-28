@@ -46,6 +46,7 @@ int main(int argc, string argv[])
         printf("%i", haystack[size]);
     }
     printf("\n");
+    printf("%i\n", needle);
 
     // sort the haystack
     sort(haystack, size);

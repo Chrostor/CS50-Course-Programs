@@ -18,9 +18,19 @@ bool search(int value, int values[], int n)
     int right = n - 1;
     bool found = false;
     int checked = 0;
-    
-    while ((left != right) && (value != values[checked]))
+    bool run = true;
+    if(value == values[0] || value == values[n-1])
     {
+        found = true;
+        run = false;
+    }
+    while ((left != right) && (value != values[checked]) && run == true)
+    {
+        if(values[0] == value)
+        {
+            found = true;
+            break;
+        }
         checked = (left + right) / 2;
         if(left == (right -1))
         {

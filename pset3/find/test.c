@@ -6,9 +6,9 @@ bool searchmethodB(int value, int values[], int n);
 
 int main(void)
 {
-    int testValue = 13;
-    int testArray[10] = {1, 3, 3, 4, 7, 8, 8, 12, 25, 62};
-    int testArrayLength = 10;
+    int testValue = 41;
+    int testArray[3] = {41, 43, 44};
+    int testArrayLength = 3;
     bool found = searchmethodB(testValue, testArray, testArrayLength);
     printf("%i\n", found);
     
@@ -40,8 +40,16 @@ bool searchmethodB(int value, int values[], int n)
     bool found = false;
     int checked = 0;
     int runout = 0;
+    bool run = true;
+    printf("first %i last %i\n", values[0], values[n-1]);
+    if(value == values[0] || value == values[n-1])
+    {
+        found = true;
+        run = false;
+        printf("stopped");
+    }
     
-    while ((left != right) && (value != values[checked]) && runout < 5)
+    while ((left != right) && (value != values[checked]) && runout < 5 && run == true)
     {
         runout ++;
         checked = (left + right) / 2;
