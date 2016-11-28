@@ -43,8 +43,10 @@ int main(int argc, string argv[])
      
         // add hay to stack
         haystack[size] = straw;
+        printf("%i", haystack[size]);
     }
     printf("\n");
+    printf("%i\n", needle);
 
     // sort the haystack
     sort(haystack, size);
