@@ -18,14 +18,10 @@ bool search(int value, int values[], int n)
     int right = n - 1;
     bool found = false;
     int checked = 0;
-    int runout = 0;
     
-    while ((left != right) && (value != values[checked]) && runout < 20)
+    while ((left != right) && (value != values[checked]))
     {
-        runout ++;
         checked = (left + right) / 2;
-        printf("%i checked\n %i left\n %i right\n ", checked, left, right);
-        
         if(left == (right -1))
         {
             if(values[left] == value || values[right] == value)
@@ -44,12 +40,10 @@ bool search(int value, int values[], int n)
             if(value > values[checked])
             {
                 left = checked + 1;
-                printf("greater\n ");
             }
             else
             {
                 right = checked - 1;
-                printf("less\n ");
             }
         }
         else
@@ -57,7 +51,6 @@ bool search(int value, int values[], int n)
             found = true;
         }
     }
-    printf("\n");
     return found;
 }
 
@@ -67,5 +60,22 @@ bool search(int value, int values[], int n)
 void sort(int values[], int n)
 {
     // TODO: implement an O(n^2) sorting algorithm
-    return;
+    bool swapped = true;
+    int left;
+    int right;
+    while (swapped == true)
+    {
+        swapped = false;
+        for (int i = 0; i < n - 1; i++)
+        {
+        left = values[i];
+        right = values[i+1];
+        if(left > right)
+            {
+                values[i] = right;
+                values[i+1] = left;
+                swapped = true;
+            }
+        }
+    }
 }
