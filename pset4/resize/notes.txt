@@ -1,7 +1,14 @@
 ToDo:
-1) Update command line arguments for resize.c to take 3 arguments with multiplier less than 100
+1) Update command line arguments for resize.c to take 3 arguments with multiplier less than 100  
 
 2) Update BITMAPINFOHEADER
     -new biWidth
     -new biHeight
+    -new biSizeImage
+    
+3) Update BITMAPFILEHEADER
+    -new bfSize
+    
+4) Update new file with expanded pixels based on n input
+    -read the scanline, record the current padding
     

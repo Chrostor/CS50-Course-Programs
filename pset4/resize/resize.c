@@ -10,15 +10,15 @@
 int main(int argc, char *argv[])
 {
     // ensure proper usage
-    if (argc != 4 || atoi(argv[1]) > 99)
+    if (argc != 4 || atoi(argv[1]) > 99 || atoi(argv[1]) < 0)
     {
-        fprintf(stderr, "Usage: ./copy n (less than 100) infile outfile\n");
+        fprintf(stderr, "Usage: ./resize n (positive whole number less than 100) infile outfile\n");
         return 1;
     }
     
     // remember multiplier
     int mult = atoi(argv[1]);
-
+    
     // remember filenames
     char *infile = argv[2];
     char *outfile = argv[3];
@@ -57,15 +57,29 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Unsupported file format.\n");
         return 4;
     }
+    
+    // determine padding required for scanlines
+    int padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;        
+    
+    // determine new padding required after multiplier
+    int newPadding = (4 - ((mult * bi.biWidth) * sizeof(RGBTRIPLE)) % 4) % 4;
+    
+    // modify outfile's BITMAPINFOHEADER
+    bi.biWidth = bi.biWidth * mult;
+    bi.biHeight = bi.biHeight * mult;
+    bi.biSizeImage = ((sizeof(RGBTRIPLE) * bi.biWidth) +
+                        newPadding) * abs(bi.biHeight);
+
+    // modify outfile's BITMAPFILEHEADER
+    bf.bfSize = bi.biSizeImage +
+                sizeof(BITMAPFILEHEADER) +
+                sizeof(BITMAPINFOHEADER);
 
     // write outfile's BITMAPFILEHEADER
     fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
-
+    
     // write outfile's BITMAPINFOHEADER
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
-
-    // determine padding required for scanlines
-    int padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
