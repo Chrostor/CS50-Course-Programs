@@ -10,15 +10,18 @@
 int main(int argc, char *argv[])
 {
     // ensure proper usage
-    if (argc != 3)
+    if (argc != 4 || atoi(argv[1]) > 99)
     {
-        fprintf(stderr, "Usage: ./copy infile outfile\n");
+        fprintf(stderr, "Usage: ./copy n (less than 100) infile outfile\n");
         return 1;
     }
+    
+    // remember multiplier
+    int mult = atoi(argv[1]);
 
     // remember filenames
-    char *infile = argv[1];
-    char *outfile = argv[2];
+    char *infile = argv[2];
+    char *outfile = argv[3];
 
     // open input file 
     FILE *inptr = fopen(infile, "r");
@@ -61,7 +64,7 @@ int main(int argc, char *argv[])
     // write outfile's BITMAPINFOHEADER
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
-    // determine padding for scanlines
+    // determine padding required for scanlines
     int padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
     // iterate over infile's scanlines
