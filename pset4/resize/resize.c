@@ -64,6 +64,11 @@ int main(int argc, char *argv[])
     // determine new padding required after multiplier
     int newPadding = (4 - ((mult * bi.biWidth) * sizeof(RGBTRIPLE)) % 4) % 4;
     
+    // grab old width and height values before they 
+    // are updated for the headers
+    int inBiWidth = bi.biWidth;
+    int inBiHeight = abs(bi.biHeight);
+ 
     // modify outfile's BITMAPINFOHEADER
     bi.biWidth = bi.biWidth * mult;
     bi.biHeight = bi.biHeight * mult;
@@ -82,29 +87,35 @@ int main(int argc, char *argv[])
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
     // iterate over infile's scanlines
-    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+    for (int i = 0; i < inBiHeight; i++)
     {
-        // iterate over pixels in scanline
-        for (int j = 0; j < bi.biWidth; j++)
+        // create storage array for storing doubled pixels
+        RGBTRIPLE tripUp[inBiWidth];
+        
+        // fill array with current scanline from infile
+        fread(&tripUp, sizeof(RGBTRIPLE), inBiWidth, inptr);
+
+        // print out the temporary array, plus padding, n times
+        for (int a = 0; a < mult; a++)
         {
-            // temporary storage
-            RGBTRIPLE triple;
-
-            // read RGB triple from infile
-            fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
-
-            // write RGB triple to outfile
-            fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
-        }
-
+            for (int j = 0; j < inBiWidth; j++) // for the width of the infile scanline
+            {
+            
+                for(int k = 0; k < mult; k++) // for n times
+                {
+                
+                    // write the pixel to the outfile
+                    fwrite(&tripUp[j], sizeof(RGBTRIPLE), 1, outptr);
+                }
+            }
+            for (int k = 0; k < newPadding; k++)
+                {
+                    fputc(0x00, outptr);
+                }
+        }    
         // skip over padding, if any
         fseek(inptr, padding, SEEK_CUR);
 
-        // then add it back (to demonstrate how)
-        for (int k = 0; k < padding; k++)
-        {
-            fputc(0x00, outptr);
-        }
     }
 
     // close infile
