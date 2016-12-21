@@ -96,7 +96,8 @@ int main(int argc, char *argv[])
         fread(&tripUp, sizeof(RGBTRIPLE), inBiWidth, inptr);
 
         // print out the temporary array, plus padding, n times
-        for (int a = 0; a < mult; a++)
+        
+        for (int a = 0; a < mult; a++) 
         {
             for (int j = 0; j < inBiWidth; j++) // for the width of the infile scanline
             {
